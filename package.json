@@ -2,10 +2,11 @@
   "name": "expense-tracker-admin",
   "version": "1.0.0",
   "description": "Backend of budgeting project for Alkemy Academy",
-  "main": "app.js",
+  "main": "src/app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
   },
   "repository": {
     "type": "git",
