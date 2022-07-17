@@ -14,6 +14,29 @@ class TransactionDAO {
 
     return id;
   }
+
+  async getTransaction(id) {
+    return db('transaction').where({ id }).first();
+  }
+
+  async getAllTransactions() {
+    return db('transaction');
+  }
+
+  async updateTransaction(id, description, amount) {
+    console.log(description)
+    return db('transaction')
+      .where({ id })
+      .update({
+        description,
+        amount,
+      })
+      .returning('*');
+  }
+
+  async deleteTransaction(id) {
+    return db('transaction').where({ id }).del();
+  }
 }
 
 export const validationSchema = [
@@ -30,11 +53,19 @@ export const validationSchema = [
     .toFloat()
     .isFloat({ min: 0 })
     .withMessage('El monto debe ser un numero positivo'),
+];
+
+
+export const validationSchemaPost = [
+  ...validationSchema,
   body('type')
     .trim()
     .exists({ checkFalsy: true })
-    .isIn(0, 1)
-    .withMessage('El tipo de transacción ingresado es invalido'),
+    .withMessage('El tipo ingresado es invalido')
+    .bail()
+    .toInt()
+    .isIn([0, 1])
+    .withMessage('El tipo ingresado no esta en el rango de valores permitidos'),
 ];
 
 export default new TransactionDAO();
