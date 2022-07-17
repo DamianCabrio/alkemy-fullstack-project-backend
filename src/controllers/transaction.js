@@ -7,7 +7,7 @@ class TransactionController {
       const id = await transactionService.createTransaction(req.body);
       res.status(201).json(success({ id }, 'Transaction created'), 201);
     } catch (err) {
-      res.status(500).json(error(err.message));
+      res.status(500).json(error("Ocurrió un error al crear la transacción, por favor vuelva a intentarlo"));
     }
   }
 
