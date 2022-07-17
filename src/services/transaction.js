@@ -1,4 +1,5 @@
 import transactionDAO from '../daos/transaction.js';
+import ApiError from '../helpers/ApiError.js';
 
 class TransactionService {
   createTransaction(transaction) {
@@ -7,23 +8,42 @@ class TransactionService {
   }
 
   async getTransaction(id) {
-    const transaction = transactionDAO.getTransaction(id);
+    const transaction = await transactionDAO.getTransaction(id);
+
     if (!transaction) {
-      throw new Error('No se encontró la operación');
+      throw ApiError.notFound();
     }
+
+    return transaction;
   }
 
   getAllTransactions() {
     return transactionDAO.getAllTransactions();
   }
 
-  updateTransaction(id, transaction) {
+  async updateTransaction(id, transaction) {
     const { description, amount } = transaction;
-    return transactionDAO.updateTransaction(id, description, amount);
+    const updatedTransaction = await transactionDAO.updateTransaction(
+      id,
+      description,
+      amount
+    );
+
+    if (!updatedTransaction) {
+      throw ApiError.notFound();
+    }
+
+    return updatedTransaction;
   }
 
-  deleteTransaction(id) {
-    return transactionDAO.deleteTransaction(id);
+  async deleteTransaction(id) {
+    const transaction = await transactionDAO.deleteTransaction(id);
+
+    if (!transaction) {
+      throw ApiError.notFound();
+    }
+
+    return transaction;
   }
 }
 

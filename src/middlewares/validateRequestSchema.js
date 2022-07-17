@@ -1,10 +1,11 @@
 import { validationResult } from 'express-validator';
-import { error } from '../helpers/responses.js';
+import ApiError from '../helpers/ApiError.js';
 
-export function validateRequestSchema(req, res, next) {
+export function validateRequestSchema(req, _res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(422).json(error(errors.array(), 422));
+    next(ApiError.badRequest(errors.array()));
+    return;
   }
   next();
 }
