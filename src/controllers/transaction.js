@@ -1,5 +1,15 @@
+import { success, error } from '../helpers/responses.js';
+import transactionService from '../services/transaction.js';
+
 class TransactionController {
-  createTransaction(req, res) {}
+  async createTransaction(req, res) {
+    try {
+      const id = await transactionService.createTransaction(req.body);
+      res.status(201).json(success({ id }, 'Transaction created'), 201);
+    } catch (err) {
+      res.status(500).json(error(err.message));
+    }
+  }
 
   getTransaction(req, res) {}
 
