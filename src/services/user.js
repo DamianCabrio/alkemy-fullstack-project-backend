@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 import userDAO from '../daos/user.js';
 import ApiError from '../helpers/ApiError.js';
 
@@ -10,7 +12,11 @@ class UserService {
 
   createUser(user) {
     const { name, surname, email, password } = user;
-    return userDAO.createUser(name, surname, email, password);
+
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+
+    return userDAO.createUser(name, surname, email, hash);
   }
 
   async getUser(id) {
