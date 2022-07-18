@@ -5,9 +5,9 @@
 export const up = function (knex) {
   return knex.schema.createTable('transaction', function (table) {
     table.increments('id').primary();
-    table.string('description').notNullable();
-    table.integer('amount').notNullable();
-    table.integer('type').notNullable().defaultTo(0);
+    table.string('description').notNullable().checkLength('>=', 1).checkLength('<=', 255);
+    table.integer('amount').notNullable().checkPositive();
+    table.enum('type', [0, 1]).notNullable();
     table.timestamps(true, true);
   });
 };
