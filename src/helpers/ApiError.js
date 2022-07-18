@@ -14,7 +14,7 @@ class ApiError {
     return new ApiError(message, 500);
   }
 
-  static notFound(message = 'Operación no encontrada') {
+  static notFound(message = 'No se encontró el recurso solicitado') {
     return new ApiError(message, 404);
   }
 }
