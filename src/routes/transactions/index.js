@@ -5,7 +5,7 @@ import { validationSchemaPost as validationSchemaTransactionPost, validationSche
 
 const router = Router();
 router.post(
-  '/',
+  '/add',
   validationSchemaTransactionPost,
   validateRequestSchema,
   transactionController.createTransaction

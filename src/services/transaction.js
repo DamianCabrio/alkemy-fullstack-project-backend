@@ -2,6 +2,12 @@ import transactionDAO from '../daos/transaction.js';
 import ApiError from '../helpers/ApiError.js';
 
 class TransactionService {
+  transactionNotFound(transaction) {
+    if (!transaction) {
+      throw ApiError.notFound();
+    }
+  }
+
   createTransaction(transaction) {
     const { description, amount, type } = transaction;
     return transactionDAO.createTransaction(description, amount, type);
@@ -10,9 +16,7 @@ class TransactionService {
   async getTransaction(id) {
     const transaction = await transactionDAO.getTransaction(id);
 
-    if (!transaction) {
-      throw ApiError.notFound();
-    }
+    this.transactionNotFound(transaction);
 
     return transaction;
   }
@@ -29,9 +33,7 @@ class TransactionService {
       amount
     );
 
-    if (!updatedTransaction) {
-      throw ApiError.notFound();
-    }
+    this.transactionNotFound(transaction);
 
     return updatedTransaction;
   }
@@ -39,9 +41,7 @@ class TransactionService {
   async deleteTransaction(id) {
     const transaction = await transactionDAO.deleteTransaction(id);
 
-    if (!transaction) {
-      throw ApiError.notFound();
-    }
+    this.transactionNotFound(transaction);
 
     return transaction;
   }

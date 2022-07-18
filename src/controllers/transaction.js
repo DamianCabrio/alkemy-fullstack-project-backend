@@ -1,12 +1,12 @@
 import ApiError from '../helpers/ApiError.js';
-import { success, error } from '../helpers/responses.js';
+import { success } from '../helpers/responses.js';
 import transactionService from '../services/transaction.js';
 
 class TransactionController {
   async createTransaction(req, res, next) {
     try {
       const id = await transactionService.createTransaction(req.body);
-      res.status(201).json(success({ id }, 'Operación creada con éxito'), 201);
+      res.status(201).json(success({ id }, 'Operación creada con éxito'));
     } catch (err) {
       next(ApiError.internalServerError());
     }

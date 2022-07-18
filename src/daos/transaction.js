@@ -24,7 +24,6 @@ class TransactionDAO {
   }
 
   async updateTransaction(id, description, amount) {
-    console.log(description)
     return db('transaction')
       .where({ id })
       .update({
