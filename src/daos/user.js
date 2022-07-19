@@ -16,12 +16,8 @@ class UserDAO {
     return id;
   }
 
-  async getUser(id) {
-    return db('user').where({ id }).first();
-  }
-
-  async getAllUsers() {
-    return db('user');
+  async getUserByEmail(email) {
+    return db('user').where({ email }).first();
   }
 
   async updateUser(id, name, surname) {
@@ -41,10 +37,6 @@ class UserDAO {
         password,
       })
       .returning('*');
-  }
-
-  async deleteUser(id) {
-    return db('user').where({ id }).del();
   }
 }
 
@@ -95,6 +87,17 @@ export const validationSchemaPost = [
       }
     })
     .withMessage('El email ingresado ya existe'),
+];
+
+export const validationSchemaLogin = [
+  ...validationSchemaPassword,
+  body('email')
+    .trim()
+    .exists({ checkFalsy: true })
+    .withMessage('El email es requerido')
+    .bail()
+    .isEmail()
+    .withMessage('El email ingresado es invalido'),
 ];
 
 export default new UserDAO();

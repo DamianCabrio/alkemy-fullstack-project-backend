@@ -5,18 +5,25 @@ import {
   validationSchemaPost as validationSchemaUserPost,
   validationSchema as validationSchemaUserPut,
   validationSchemaPassword as validationSchemaUserPassword,
+  validationSchemaLogin as validationSchemaUserLogin,
 } from '../../daos/user.js';
 
 const router = Router();
 router.post(
-  '/add',
+  '/register',
   validationSchemaUserPost,
   validateRequestSchema,
-  userController.createUser
+  userController.register
 );
 
-router.get('/:id', userController.getUser);
-router.get('/', userController.getAllUsers);
+router.post(
+  '/login',
+  validationSchemaUserLogin,
+  validateRequestSchema,
+  userController.login
+);
+
+
 router.put(
   '/:id',
   validationSchemaUserPut,
@@ -30,7 +37,5 @@ router.put(
   validateRequestSchema,
   userController.updateUserPassword
 );
-
-router.delete('/:id', userController.deleteUser);
 
 export default router;

@@ -17,6 +17,10 @@ class ApiError {
   static notFound(message = 'No se encontró el recurso solicitado') {
     return new ApiError(message, 404);
   }
+
+  static unauthorized(message = 'No tienes permisos para realizar esta acción') {
+    return new ApiError(message, 401);
+  }
 }
 
 export default ApiError;

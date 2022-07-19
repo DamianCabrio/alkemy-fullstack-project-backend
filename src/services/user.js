@@ -10,7 +10,7 @@ class UserService {
     }
   }
 
-  createUser(user) {
+  register(user) {
     const { name, surname, email, password } = user;
 
     const salt = bcrypt.genSaltSync(10);
@@ -19,16 +19,18 @@ class UserService {
     return userDAO.createUser(name, surname, email, hash);
   }
 
-  async getUser(id) {
-    const user = await userDAO.getUser(id);
+  async login(email, password) {
+    const user = await userDAO.getUserByEmail(email);
 
     this.userNotFound(user);
 
-    return user;
-  }
+    const isValid = bcrypt.compareSync(password, user.password);
 
-  getAllUsers() {
-    return userDAO.getAllUsers();
+    if (!isValid) {
+      throw ApiError.unauthorized();
+    }
+
+    return user;
   }
 
   async updateUser(id, user) {
@@ -46,14 +48,6 @@ class UserService {
     this.userNotFound(user);
 
     return updatedUser;
-  }
-
-  async deleteUser(id) {
-    const user = await userDAO.deleteUser(id);
-
-    this.userNotFound(user);
-
-    return user;
   }
 }
 
