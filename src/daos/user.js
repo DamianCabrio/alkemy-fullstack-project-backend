@@ -27,7 +27,6 @@ class UserDAO {
         name,
         surname,
       })
-      .returning('*');
   }
 
   async updateUserPassword(id, password) {
@@ -36,7 +35,6 @@ class UserDAO {
       .update({
         password,
       })
-      .returning('*');
   }
 }
 
