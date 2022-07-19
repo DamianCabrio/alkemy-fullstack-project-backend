@@ -79,8 +79,7 @@ export const validationSchemaPost = [
       if (user) {
         throw new Error('El email ingresado ya existe');
       }
-    })
-    .withMessage('El email ingresado ya existe'),
+    }),
 ];
 
 export const validationSchemaLogin = [

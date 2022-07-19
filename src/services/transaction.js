@@ -8,29 +8,37 @@ class TransactionService {
     }
   }
 
-  createTransaction(transaction) {
-    const { description, amount, type } = transaction;
-    return transactionDAO.createTransaction(description, amount, type);
+  createTransaction(transaction, userId) {
+    const { description, amount, type, category_id } = transaction;
+    return transactionDAO.createTransaction(
+      description,
+      amount,
+      type,
+      category_id,
+      userId
+    );
   }
 
-  async getTransaction(id) {
-    const transaction = await transactionDAO.getTransaction(id);
+  async getTransaction(id, userId) {
+    const transaction = await transactionDAO.getTransaction(id, userId);
 
     this.transactionNotFound(transaction);
 
     return transaction;
   }
 
-  getAllTransactions() {
-    return transactionDAO.getAllTransactions();
+  getUserTransactions(userId) {
+    return transactionDAO.getUserTransactions(userId);
   }
 
-  async updateTransaction(id, transaction) {
-    const { description, amount } = transaction;
+  async updateTransaction(id, transaction, userId) {
+    const { description, amount, category_id } = transaction;
     const updatedTransaction = await transactionDAO.updateTransaction(
       id,
       description,
-      amount
+      amount,
+      category_id,
+      userId
     );
 
     this.transactionNotFound(transaction);
@@ -38,8 +46,8 @@ class TransactionService {
     return updatedTransaction;
   }
 
-  async deleteTransaction(id) {
-    const transaction = await transactionDAO.deleteTransaction(id);
+  async deleteTransaction(id, userId) {
+    const transaction = await transactionDAO.deleteTransaction(id, userId);
 
     this.transactionNotFound(transaction);
 
