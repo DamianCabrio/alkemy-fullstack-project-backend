@@ -3,7 +3,7 @@ import ApiError from '../helpers/ApiError.js';
 
 function apiErrorHandler(err, _req, res, _next) {
   if (err instanceof ApiError) {
-    res.status(err.statusCode).json(error(err.message, err.status));
+    res.status(err.statusCode).json(error(err.message, err.statusCode));
     return;
   }
 
