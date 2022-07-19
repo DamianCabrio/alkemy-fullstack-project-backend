@@ -1,5 +1,5 @@
 {
-  "name": "expense-tracker-admin",
+  "name": "alkemy-fullstack-project-backend",
   "version": "1.0.0",
   "description": "Backend of budgeting project for Alkemy Academy",
   "main": "src/app.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DamianCabrio/alkemy-fullstack-project.git"
+    "url": "git+https://github.com/DamianCabrio/alkemy-fullstack-project-backend.git"
   },
   "keywords": [
     "alkemy",
