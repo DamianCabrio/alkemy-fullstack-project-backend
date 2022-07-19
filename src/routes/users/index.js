@@ -7,6 +7,7 @@ import {
   validationSchemaPassword as validationSchemaUserPassword,
   validationSchemaLogin as validationSchemaUserLogin,
 } from '../../daos/user.js';
+import authToken from '../../middlewares/authToken.js';
 
 const router = Router();
 router.post(
@@ -26,6 +27,7 @@ router.post(
 
 router.put(
   '/:id',
+  authToken,
   validationSchemaUserPut,
   validateRequestSchema,
   userController.updateUser
@@ -33,6 +35,7 @@ router.put(
 
 router.put(
   '/:id/password',
+  authToken,
   validationSchemaUserPassword,
   validateRequestSchema,
   userController.updateUserPassword

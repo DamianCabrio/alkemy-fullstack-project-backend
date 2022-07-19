@@ -21,20 +21,16 @@ class UserDAO {
   }
 
   async updateUser(id, name, surname) {
-    return db('user')
-      .where({ id })
-      .update({
-        name,
-        surname,
-      })
+    return db('user').where({ id }).update({
+      name,
+      surname,
+    });
   }
 
   async updateUserPassword(id, password) {
-    return db('user')
-      .where({ id })
-      .update({
-        password,
-      })
+    return db('user').where({ id }).update({
+      password,
+    });
   }
 }
 

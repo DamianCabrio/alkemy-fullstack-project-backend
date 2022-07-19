@@ -1,7 +1,13 @@
+import '../helpers/loadEnv.js';
+
+const { JWT_SECRET, JWT_EXPIRATION_TIME } = process.env;
+
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 import userDAO from '../daos/user.js';
 import ApiError from '../helpers/ApiError.js';
+import { capitalize } from '../helpers/capitalizer.js';
 
 class UserService {
   userNotFound(user) {
@@ -16,7 +22,12 @@ class UserService {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
 
-    return userDAO.createUser(name, surname, email, hash);
+    return userDAO.createUser(
+      capitalize(name),
+      capitalize(surname),
+      email,
+      hash
+    );
   }
 
   async login(email, password) {
@@ -25,11 +36,16 @@ class UserService {
     this.userNotFound(user);
 
     const isValid = bcrypt.compareSync(password, user.password);
-
     if (!isValid) {
       throw ApiError.unauthorized();
     }
 
+    delete user.password;
+
+    user.token = jwt.sign(user, JWT_SECRET, {
+      expiresIn: JWT_EXPIRATION_TIME,
+    });
+    
     return user;
   }
 

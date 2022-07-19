@@ -5,8 +5,9 @@ import usersRouter from "./users/index.js";
 
 const router = Router();
 
+router.use("/users", usersRouter);
+
 router.use("/transactions", transactionsRouter);
 router.use("/categories", categoriesRouter);
-router.use("/users", usersRouter);
 
 export default router;
