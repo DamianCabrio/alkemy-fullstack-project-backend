@@ -21,6 +21,10 @@ class ApiError {
   static unauthorized(message = 'No tienes permisos para realizar esta acción') {
     return new ApiError(message, 401);
   }
+
+  static forbidden(message = 'No tienes permisos para realizar esta acción') {
+    return new ApiError(message, 403);
+  }
 }
 
 export default ApiError;
