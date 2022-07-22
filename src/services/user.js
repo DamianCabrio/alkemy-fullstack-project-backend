@@ -50,7 +50,7 @@ class UserService {
 
     userNotFound(user);
 
-    const isValid = bcrypt.compareSync(password, user.password);
+    const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
       throw ApiError.unauthorized('Contraseña o email incorrectos');
     }
