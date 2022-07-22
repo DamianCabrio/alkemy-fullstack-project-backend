@@ -4,7 +4,7 @@ import ApiError from '../helpers/ApiError.js';
 function apiErrorHandler(err, _req, res, _next) {
   if (err instanceof ApiError) {
     let errMessage;
-    if (err.message.length > 0) {
+    if (Array.isArray(err.message)) {
       errMessage = err.message.map((message) => message.msg).join(', ');
     }
 
