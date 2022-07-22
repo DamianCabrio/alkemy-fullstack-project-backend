@@ -1,5 +1,6 @@
 import './helpers/loadEnv.js';
 import cors from 'cors';
+import morgan from 'morgan';
 
 const { PORT } = process.env;
 
@@ -9,6 +10,11 @@ import apiErrorHandler from './middlewares/apiErrorHandler.js';
 import notFound from './middlewares/notFound.js';
 
 const app = express();
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
