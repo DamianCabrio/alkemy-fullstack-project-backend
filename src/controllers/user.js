@@ -6,8 +6,8 @@ import userService from '../services/user.js';
 class UserController {
   async register(req, res, next) {
     try {
-      const id = await userService.register(req.body);
-      success(res, { id }, 'Usuario creado con éxito', StatusCodes.CREATED);
+      const user = await userService.register(req.body);
+      success(res, user, 'Usuario creado con éxito', StatusCodes.CREATED);
     } catch (err) {
       next(err);
     }

@@ -10,8 +10,7 @@ class UserDAO {
         surname,
         email,
         password,
-      })
-      .returning('id');
+      });
 
     return id;
   }

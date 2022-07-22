@@ -20,18 +20,29 @@ const hashPassword = async (password) => {
   return bcrypt.hash(password, salt);
 };
 
+const createJWT = (user) => {
+  return jwt.sign(user, JWT_SECRET, {
+    expiresIn: JWT_EXPIRATION_TIME,
+  });
+};
+
 class UserService {
   async register(user) {
     const { name, surname, email, password } = user;
 
     const hashedPassword = await hashPassword(password);
 
-    return userDAO.createUser(
+    const id = await userDAO.createUser(
       capitalize(name),
       capitalize(surname),
       email,
       hashedPassword
     );
+
+    const newUser = { id, name, surname, email, password };
+    const token = createJWT(newUser);
+
+    return { user: newUser, token };
   }
 
   async login(email, password) {
@@ -46,9 +57,7 @@ class UserService {
 
     delete user.password;
 
-    const token = jwt.sign(user, JWT_SECRET, {
-      expiresIn: JWT_EXPIRATION_TIME,
-    });
+    const token = createJWT(user);
 
     return { user, token };
   }

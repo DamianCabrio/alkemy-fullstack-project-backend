@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 export const success = (res, data, msg, status = StatusCodes.OK) => {
   res.status(status).json({
     status: status,
-    data,
+    result: data,
     message: msg,
     error: false,
   });
@@ -12,7 +12,7 @@ export const success = (res, data, msg, status = StatusCodes.OK) => {
 export const error = (res, msg, status = StatusCodes.INTERNAL_SERVER_ERROR) => {
   res.status(status).json({
     status: status,
-    data: null,
+    result: null,
     message: msg,
     error: true,
   });
