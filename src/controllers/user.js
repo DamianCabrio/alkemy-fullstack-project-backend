@@ -1,4 +1,5 @@
-import ApiError from '../helpers/ApiError.js';
+import { StatusCodes } from 'http-status-codes';
+
 import { success } from '../helpers/responses.js';
 import userService from '../services/user.js';
 
@@ -6,16 +7,16 @@ class UserController {
   async register(req, res, next) {
     try {
       const id = await userService.register(req.body);
-      res.status(201).json(success({ id }, 'Usuario creada con éxito'));
+      success(res, { id }, 'Usuario creado con éxito', StatusCodes.CREATED);
     } catch (err) {
-      next(ApiError.internalServerError());
+      next(err);
     }
   }
 
   async login(req, res, next) {
     try {
       const user = await userService.login(req.body.email, req.body.password);
-      res.status(200).json(success(user, 'Usuario autenticado con éxito'));
+      success(res, user, 'Usuario autenticado con éxito');
     } catch (err) {
       next(err);
     }
@@ -24,8 +25,7 @@ class UserController {
   async updateUser(req, res, next) {
     try {
       const user = await userService.updateUser(req.params.id, req.body);
-
-      res.status(200).json(success(user, 'Usuario actualizada con éxito'));
+      success(res, user, 'Usuario actualizada con éxito');
     } catch (err) {
       next(err);
     }
@@ -37,8 +37,7 @@ class UserController {
         req.params.id,
         req.body
       );
-
-      res.status(200).json(success(user, 'Contraseña actualizada con éxito'));
+      success(res, user, 'Contraseña actualizada con éxito');
     } catch (err) {
       next(err);
     }

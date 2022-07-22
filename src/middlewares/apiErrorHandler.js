@@ -3,13 +3,10 @@ import ApiError from '../helpers/ApiError.js';
 
 function apiErrorHandler(err, _req, res, _next) {
   if (err instanceof ApiError) {
-    res.status(err.statusCode).json(error(err.message, err.statusCode));
+    error(res, err.message, err.statusCode);
     return;
   }
-
-  res
-    .status(500)
-    .json(error('Algo salio mal, por favor vuelva a intentar', 500));
+  error(res, 'Algo salio mal, por favor vuelva a intentar');
 }
 
 export default apiErrorHandler;
