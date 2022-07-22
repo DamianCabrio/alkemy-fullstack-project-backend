@@ -2,7 +2,7 @@ import './helpers/loadEnv.js';
 import cors from 'cors';
 import morgan from 'morgan';
 
-const { PORT } = process.env;
+const { PORT, NODE_ENV } = process.env;
 
 import express from 'express';
 import appRouter from './routes/index.js';
@@ -11,7 +11,7 @@ import notFound from './middlewares/notFound.js';
 
 const app = express();
 
-if (process.env.NODE_ENV === 'development') {
+if (NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 

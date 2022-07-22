@@ -82,7 +82,6 @@ export const validationSchemaPost = [
 ];
 
 export const validationSchemaLogin = [
-  ...validationSchemaPassword,
   body('email')
     .trim()
     .exists({ checkFalsy: true })
