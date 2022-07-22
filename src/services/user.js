@@ -46,11 +46,11 @@ class UserService {
 
     delete user.password;
 
-    user.token = jwt.sign(user, JWT_SECRET, {
+    const token = jwt.sign(user, JWT_SECRET, {
       expiresIn: JWT_EXPIRATION_TIME,
     });
 
-    return user;
+    return { user, token };
   }
 
   async updateUser(id, user) {
