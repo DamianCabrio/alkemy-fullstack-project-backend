@@ -11,7 +11,7 @@ import { capitalize } from '../helpers/capitalizer.js';
 
 const userNotFound = (user) => {
   if (!user) {
-    throw ApiError.notFound();
+    throw ApiError.notFound('El usuario no existe');
   }
 };
 
