@@ -52,7 +52,7 @@ class UserService {
 
     const isValid = bcrypt.compareSync(password, user.password);
     if (!isValid) {
-      throw ApiError.unauthorized();
+      throw ApiError.unauthorized('Contraseña o email incorrectos');
     }
 
     delete user.password;
