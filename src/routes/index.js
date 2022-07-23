@@ -2,7 +2,7 @@ import { Router } from 'express';
 import transactionsRouter from './transactions/index.js';
 import categoriesRouter from './categories/index.js';
 import usersRouter from './users/index.js';
-import authToken from '../../middlewares/authToken.js';
+import authToken from '../middlewares/authToken.js';
 
 const router = Router();
 
