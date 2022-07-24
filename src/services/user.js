@@ -56,28 +56,32 @@ class UserService {
     }
 
     delete user.password;
-
     const token = createJWT(user);
 
     return { user, token };
   }
 
-  async updateUser(id, user) {
-    const { name, surname } = user;
-    const updatedUser = await userDAO.updateUser(id, name, surname);
+  async updateUser(id, body, user) {
+    const { name, surname } = body;
+    await userDAO.updateUser(id, name, surname);
 
-    userNotFound(user);
+    const { email, id: userId, created_at, updated_at } = user;
+    const updatedUser = {
+      name,
+      surname,
+      email,
+      id: userId,
+      created_at,
+      updated_at,
+    };
+    const token = createJWT(updatedUser);
 
-    return updatedUser;
+    return { user: updatedUser, token };
   }
 
-  async updateUserPassword(id, password) {
-    const hashedPassword = await hashPassword(password);
-    const updatedUser = await userDAO.updateUserPassword(id, hashedPassword);
-
-    userNotFound(user);
-
-    return updatedUser;
+  async updateUserPassword(id, body) {
+    const hashedPassword = await hashPassword(body.password);
+    await userDAO.updateUserPassword(id, hashedPassword);
   }
 }
 

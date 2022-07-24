@@ -2,8 +2,8 @@ import { Router } from 'express';
 import userController from '../../controllers/user.js';
 import { validateRequestSchema } from '../../middlewares/validateRequestSchema.js';
 import {
-  validationSchemaPost as validationSchemaUserPost,
-  validationSchema as validationSchemaUserPut,
+  validationSchemaRegister as validationSchemaUserRegister,
+  validationSchemaProfile as validationSchemaUserProfile,
   validationSchemaPassword as validationSchemaUserPassword,
   validationSchemaLogin as validationSchemaUserLogin,
 } from '../../daos/user.js';
@@ -12,7 +12,7 @@ import authToken from '../../middlewares/authToken.js';
 const router = Router();
 router.post(
   '/register',
-  validationSchemaUserPost,
+  validationSchemaUserRegister,
   validateRequestSchema,
   userController.register
 );
@@ -28,7 +28,7 @@ router.post(
 router.put(
   '/update',
   authToken,
-  validationSchemaUserPut,
+  validationSchemaUserProfile,
   validateRequestSchema,
   userController.updateUser
 );

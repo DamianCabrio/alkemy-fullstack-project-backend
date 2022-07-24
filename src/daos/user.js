@@ -45,7 +45,7 @@ export const validationSchemaPassword = [
     ),
 ];
 
-export const validationSchema = [
+export const validationSchemaProfile = [
   body('name')
     .trim()
     .exists({ checkFalsy: true })
@@ -60,11 +60,11 @@ export const validationSchema = [
     .bail()
     .isLength({ min: 1, max: 255 })
     .withMessage('El apellido ingresado es invalido'),
-  ...validationSchemaPassword,
 ];
 
-export const validationSchemaPost = [
-  ...validationSchema,
+export const validationSchemaRegister = [
+  ...validationSchemaProfile,
+  ...validationSchemaPassword,
   body('email')
     .trim()
     .exists({ checkFalsy: true })
