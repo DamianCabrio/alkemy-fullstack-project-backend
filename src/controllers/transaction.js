@@ -1,3 +1,4 @@
+import { StatusCodes } from 'http-status-codes';
 import { success } from '../helpers/responses.js';
 import transactionService from '../services/transaction.js';
 
@@ -10,7 +11,7 @@ class TransactionController {
       success(
         res,
         { id, description, amount, type, category_id, user_id },
-        'Operación creada con éxito'
+        'Operación creada con éxito', StatusCodes.CREATED
       );
     } catch (err) {
       next(next);
