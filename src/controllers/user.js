@@ -23,8 +23,9 @@ class UserController {
   }
 
   async updateUser(req, res, next) {
+    const userId = req.user.id;
     try {
-      const user = await userService.updateUser(req.params.id, req.body);
+      const user = await userService.updateUser(userId, req.body);
       success(res, user, 'Usuario actualizada con éxito');
     } catch (err) {
       next(err);
@@ -32,11 +33,9 @@ class UserController {
   }
 
   async updateUserPassword(req, res, next) {
+    const userId = req.user.id;
     try {
-      const user = await userService.updateUserPassword(
-        req.params.id,
-        req.body
-      );
+      const user = await userService.updateUserPassword(userId, req.body);
       success(res, user, 'Contraseña actualizada con éxito');
     } catch (err) {
       next(err);

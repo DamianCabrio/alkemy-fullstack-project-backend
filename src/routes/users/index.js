@@ -26,7 +26,7 @@ router.post(
 
 
 router.put(
-  '/:id',
+  '/update',
   authToken,
   validationSchemaUserPut,
   validateRequestSchema,
@@ -34,7 +34,7 @@ router.put(
 );
 
 router.put(
-  '/:id/password',
+  '/update-password',
   authToken,
   validationSchemaUserPassword,
   validateRequestSchema,
