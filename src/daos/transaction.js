@@ -64,7 +64,7 @@ export const validationSchema = [
     .withMessage('El monto es requerido')
     .bail()
     .toFloat()
-    .isFloat({ min: 0 })
+    .isFloat({ min: 1 })
     .withMessage('El monto debe ser un numero positivo'),
   body('category_id')
     .trim()
@@ -97,8 +97,7 @@ export const validationSchemaPost = [
     .exists({ checkFalsy: true })
     .withMessage('El tipo de transacción es requerido')
     .bail()
-    .toInt()
-    .isIn([0, 1])
+    .isIn(['0', '1'])
     .withMessage('El tipo ingresado no esta en el rango de valores permitidos'),
 ];
 

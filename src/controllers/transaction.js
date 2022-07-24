@@ -14,7 +14,7 @@ class TransactionController {
         'Operación creada con éxito', StatusCodes.CREATED
       );
     } catch (err) {
-      next(next);
+      next(err);
     }
   }
 
