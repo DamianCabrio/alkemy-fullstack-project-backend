@@ -5,13 +5,14 @@ import transactionService from '../services/transaction.js';
 class TransactionController {
   async createTransaction(req, res, next) {
     try {
-      const user_id = req.user.id;
-      const id = await transactionService.createTransaction(req.body, user_id);
+      const userId = parseInt(req.user.id);
+      const id = await transactionService.createTransaction(req.body, userId);
       const { description, amount, type, date, category_id } = req.body;
       success(
         res,
-        { id, description, amount, type, date, category_id, user_id },
-        'Operación creada con éxito', StatusCodes.CREATED
+        { id, description, amount, type, date, category_id, userId },
+        'Operación creada con éxito',
+        StatusCodes.CREATED
       );
     } catch (err) {
       next(err);
@@ -20,9 +21,10 @@ class TransactionController {
 
   async getTransaction(req, res, next) {
     try {
+      const userId = parseInt(req.user.id);
       const transaction = await transactionService.getTransaction(
         req.params.id,
-        req.user.id
+        userId
       );
       success(res, transaction, 'Operación obtenida con éxito');
     } catch (err) {
@@ -32,10 +34,15 @@ class TransactionController {
 
   async getUserTransactions(req, res, next) {
     try {
-      const transactions = await transactionService.getUserTransactions(
-        req.user.id
+      const userId = parseInt(req.user.id);
+      const transactions = await transactionService.getUserTransactions(userId);
+      const total = transactions.length;
+      const numOfPages = 1;
+      success(
+        res,
+        { transactions, total, numOfPages },
+        'Operaciones obtenidas con éxito'
       );
-      success(res, transactions, 'Operaciones obtenidas con éxito');
     } catch (err) {
       next(err);
     }
@@ -44,7 +51,7 @@ class TransactionController {
   async updateTransaction(req, res, next) {
     try {
       const transactionId = req.params.id;
-      const userId = req.user.id;
+      const userId = parseInt(req.user.id);
 
       await transactionService.updateTransaction(
         transactionId,
@@ -65,7 +72,8 @@ class TransactionController {
 
   async deleteTransaction(req, res, next) {
     try {
-      await transactionService.deleteTransaction(req.params.id, req.user.id);
+      const userId = parseInt(req.user.id);
+      await transactionService.deleteTransaction(req.params.id, userId);
       success(res, {}, 'Operación eliminada con éxito');
     } catch (err) {
       next(err);

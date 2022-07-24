@@ -23,7 +23,7 @@ class UserController {
   }
 
   async updateUser(req, res, next) {
-    const userId = req.user.id;
+    const userId = parseInt(req.user.id);
     try {
       const result = await userService.updateUser(userId, req.body, req.user);
       success(res, result, 'Usuario actualizada con éxito');
@@ -33,7 +33,7 @@ class UserController {
   }
 
   async updateUserPassword(req, res, next) {
-    const userId = req.user.id;
+    const userId = parseInt(req.user.id);
     try {
       await userService.updateUserPassword(userId, req.body);
       success(res, {}, 'Contraseña actualizada con éxito');
