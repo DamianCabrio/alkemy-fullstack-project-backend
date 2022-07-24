@@ -25,15 +25,17 @@ class TransactionDAO {
 
   async getTransaction(id, userId) {
     return db('transaction')
-      .innerJoin('category', 'transaction.category_id', 'category.id')
+      .innerJoin('category', 'transaction.category_id', '=', 'category.id')
       .where({ id, user_id: userId })
+      .select('transaction.*', 'category.name as category_name')
       .first();
   }
 
   async getUserTransactions(userId) {
     return db('transaction')
-      .innerJoin('category', 'transaction.category_id', 'category.id')
-      .where({ user_id: userId });
+      .innerJoin('category', 'transaction.category_id', '=', 'category.id')
+      .where({ user_id: userId })
+      .select('transaction.*', 'category.name as category_name');
   }
 
   async updateTransaction(id, description, amount, date, category_id, userId) {
