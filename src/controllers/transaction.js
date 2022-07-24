@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
+import ApiError from '../helpers/ApiError.js';
 import { success } from '../helpers/responses.js';
 import transactionService from '../services/transaction.js';
 
@@ -26,6 +27,11 @@ class TransactionController {
         req.params.id,
         userId
       );
+
+      if (!transaction) {
+        throw ApiError.notFound();
+      }
+
       success(res, transaction, 'Operación obtenida con éxito');
     } catch (err) {
       next(err);
@@ -53,11 +59,15 @@ class TransactionController {
       const transactionId = req.params.id;
       const userId = parseInt(req.user.id);
 
-      await transactionService.updateTransaction(
+      const result = await transactionService.updateTransaction(
         transactionId,
         req.body,
         userId
       );
+
+      if (!result) {
+        throw ApiError.forbidden();
+      }
 
       const { description, amount, date, category_id } = req.body;
       success(
@@ -73,7 +83,15 @@ class TransactionController {
   async deleteTransaction(req, res, next) {
     try {
       const userId = parseInt(req.user.id);
-      await transactionService.deleteTransaction(req.params.id, userId);
+      const result = await transactionService.deleteTransaction(
+        req.params.id,
+        userId
+      );
+
+      if (!result) {
+        throw ApiError.forbidden();
+      }
+
       success(res, {}, 'Operación eliminada con éxito');
     } catch (err) {
       next(err);

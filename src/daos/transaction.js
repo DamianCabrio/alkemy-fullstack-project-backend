@@ -26,8 +26,8 @@ class TransactionDAO {
   async getTransaction(id, userId) {
     return db('transaction')
       .innerJoin('category', 'transaction.category_id', '=', 'category.id')
-      .where({ id, user_id: userId })
       .select('transaction.*', 'category.name as category_name')
+      .where({ 'transaction.id': id, user_id: userId })
       .first();
   }
 
