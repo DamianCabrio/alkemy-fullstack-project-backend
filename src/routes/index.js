@@ -9,6 +9,6 @@ const router = Router();
 router.use('/users', usersRouter);
 
 router.use('/transactions', authToken, transactionsRouter);
-router.use('/categories', authToken, categoriesRouter);
+router.use('/categories', categoriesRouter);
 
 export default router;
