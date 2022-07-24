@@ -7,10 +7,10 @@ class TransactionController {
     try {
       const user_id = req.user.id;
       const id = await transactionService.createTransaction(req.body, user_id);
-      const { description, amount, type, category_id } = req.body;
+      const { description, amount, type, date, category_id } = req.body;
       success(
         res,
-        { id, description, amount, type, category_id, user_id },
+        { id, description, amount, type, date, category_id, user_id },
         'Operación creada con éxito', StatusCodes.CREATED
       );
     } catch (err) {
@@ -52,10 +52,10 @@ class TransactionController {
         userId
       );
 
-      const { description, amount, category_id } = req.body;
+      const { description, amount, date, category_id } = req.body;
       success(
         res,
-        { id: transactionId, description, amount, category_id },
+        { id: transactionId, description, date, amount, category_id },
         'Operación actualizada con éxito'
       );
     } catch (err) {

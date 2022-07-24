@@ -3,16 +3,22 @@ import { body } from 'express-validator';
 import db from '../db/db.js';
 
 class TransactionDAO {
-  async createTransaction(description, amount, type, category_id, user_id) {
-    const [id] = await db('transaction')
-      .insert({
-        description,
-        amount,
-        type,
-        category_id,
-        user_id,
-      })
-      .returning('id');
+  async createTransaction(
+    description,
+    amount,
+    type,
+    date,
+    category_id,
+    user_id
+  ) {
+    const [id] = await db('transaction').insert({
+      description,
+      amount,
+      type,
+      date,
+      category_id,
+      user_id,
+    });
 
     return id;
   }
@@ -30,10 +36,11 @@ class TransactionDAO {
       .where({ user_id: userId });
   }
 
-  async updateTransaction(id, description, amount, category_id, userId) {
+  async updateTransaction(id, description, amount, date, category_id, userId) {
     return db('transaction').where({ id, user_id: userId }).update({
       description,
       amount,
+      date,
       category_id,
     });
   }
@@ -74,6 +81,13 @@ export const validationSchema = [
         throw new Error('La categoría ingresada no existe');
       }
     }),
+  body('date')
+    .trim()
+    .exists({ checkFalsy: true })
+    .withMessage('La fecha es requerida')
+    .bail()
+    .isISO8601()
+    .withMessage('La fecha debe ser una fecha válida'),
 ];
 
 export const validationSchemaPost = [

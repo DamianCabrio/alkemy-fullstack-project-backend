@@ -9,13 +9,14 @@ class TransactionService {
   }
 
   createTransaction(transaction, userId) {
-    const { description, amount, type, category_id } = transaction;
+    const { description, amount, type, date, category_id } = transaction;
     return transactionDAO.createTransaction(
       description,
       amount,
       type,
+      date,
       category_id,
-      userId
+      userId,
     );
   }
 
@@ -32,11 +33,12 @@ class TransactionService {
   }
 
   async updateTransaction(id, transaction, userId) {
-    const { description, amount, category_id } = transaction;
+    const { description, amount, date, category_id } = transaction;
     const updatedTransaction = await transactionDAO.updateTransaction(
       id,
       description,
       amount,
+      date,
       category_id,
       userId
     );
