@@ -1,6 +1,8 @@
 import './helpers/loadEnv.js';
 import cors from 'cors';
 import morgan from 'morgan';
+import helmet from 'helmet';
+import xss from 'xss-clean';
 
 const { PORT, NODE_ENV } = process.env;
 
@@ -17,6 +19,8 @@ if (NODE_ENV === 'development') {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
+app.use(xss());
 app.use(cors());
 
 app.use('/api/v1/', appRouter);
