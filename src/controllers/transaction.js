@@ -58,9 +58,18 @@ class TransactionController {
         queryObject.search = search.toLowerCase();
       }
 
-      const transactions = await transactionService.getUserTransactions(userId, queryObject);
-      const total = transactions.length;
-      const numOfPages = 1;
+      const page = parseInt(req.query.page) || 1;
+      const limit = 10;
+      const offset = (page - 1) * limit;
+
+      const result = await transactionService.getUserTransactions(
+        userId,
+        queryObject,
+        limit,
+        offset
+      );
+      const { total, transactions } = result;
+      const numOfPages = Math.ceil(total / limit);
       success(
         res,
         { transactions, total, numOfPages },

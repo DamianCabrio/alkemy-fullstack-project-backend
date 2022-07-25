@@ -28,8 +28,8 @@ class TransactionService {
     return transaction;
   }
 
-  getUserTransactions(userId, filters) {
-    return transactionDAO.getUserTransactions(userId, filters);
+  getUserTransactions(userId, filters, limit, offset) {
+    return transactionDAO.getUserTransactions(userId, filters, limit, offset);
   }
 
   async updateTransaction(id, transaction, userId) {

@@ -41,7 +41,7 @@ class TransactionDAO {
       .first();
   }
 
-  async getUserTransactions(userId, filters) {
+  async getUserTransactions(userId, filters, limit, offset) {
     const { type, category, sort, search } = filters;
 
     const query = db('transaction')
@@ -51,11 +51,6 @@ class TransactionDAO {
         'transaction.type',
         '=',
         'transaction_type.id'
-      )
-      .select(
-        'transaction.*',
-        'category.name as category_name',
-        'transaction_type.name as type_name'
       )
       .where({ user_id: userId });
 
@@ -70,11 +65,21 @@ class TransactionDAO {
     }
     if (sort) {
       query.orderBy('date', sort);
-    }else{
+    } else {
       query.orderBy('date', 'desc');
     }
 
-    return query;
+    const totalCount = await query.clone().count('* as total').first();
+    const transactions = await query
+      .limit(limit)
+      .offset(offset)
+      .select(
+        'transaction.*',
+        'category.name as category_name',
+        'transaction_type.name as type_name'
+      );
+
+    return {total: totalCount.total, transactions};
   }
 
   async updateTransaction(id, description, amount, date, category_id, userId) {
