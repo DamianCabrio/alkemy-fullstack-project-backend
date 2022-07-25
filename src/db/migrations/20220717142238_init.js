@@ -7,7 +7,6 @@ export const up = function (knex) {
     table.increments('id').primary();
     table.string('description').notNullable().checkLength('>=', 1).checkLength('<=', 255);
     table.float('amount').notNullable().checkPositive();
-    table.enu('type', ['0', '1']).notNullable();
     table.date('date').notNullable();
     table.timestamps(true, true);
   });
