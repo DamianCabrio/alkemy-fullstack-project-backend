@@ -55,6 +55,10 @@ class TransactionService {
 
     return transaction;
   }
+
+  async showStats(userId) {
+    return transactionDAO.showStats(userId);
+  }
 }
 
 export default new TransactionService();

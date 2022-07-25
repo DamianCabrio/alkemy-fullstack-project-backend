@@ -11,6 +11,7 @@ router.post(
   validateRequestSchema,
   transactionController.createTransaction
 );
+router.get('/stats', transactionController.showStats);
 
 router.get('/:id', transactionController.getTransaction);
 router.get('/', transactionController.getUserTransactions);

@@ -97,6 +97,16 @@ class TransactionController {
       next(err);
     }
   }
+
+  async showStats(req, res, next) {
+    try {
+      const userId = parseInt(req.user.id);
+      const stats = await transactionService.showStats(userId);
+      success(res, stats, 'Estadísticas obtenidas con éxito');
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export default new TransactionController();

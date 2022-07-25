@@ -70,6 +70,32 @@ class TransactionDAO {
   async deleteTransaction(id, userId) {
     return db('transaction').where({ id, user_id: userId }).del();
   }
+
+  async showStats(userId) {
+    const groupByType = await db.raw(
+      `SELECT COALESCE(COUNT(t.id),0) as total, COALESCE(SUM(t.amount),0) as total_amount, tt.name 
+      FROM transaction t 
+      RIGHT JOIN transaction_type tt on t.type = tt.id
+      WHERE t.user_id = ? OR t.user_id IS NULL
+      GROUP BY tt.id;`,
+      [userId]
+    );
+
+    const groupByCategory = await db.raw(
+      `SELECT COALESCE(COUNT(t.id),0) as total, COALESCE(SUM(t.amount),0) as total_amount, c.name 
+      FROM transaction t 
+      RIGHT JOIN category c on t.category_id = c.id
+      WHERE t.user_id = ? OR t.user_id IS NULL
+      GROUP BY c.id;`,
+      [userId]
+    );
+
+    return {
+      groupByType: groupByType[0],
+      groupByCategory: groupByCategory[0],
+      monthlyTransactions: [],
+    };
+  }
 }
 
 export const validationSchema = [
