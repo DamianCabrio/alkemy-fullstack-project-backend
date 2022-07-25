@@ -4,6 +4,9 @@
   "description": "Backend of budgeting project for Alkemy Academy",
   "main": "src/app.js",
   "type": "module",
+  "engines": {
+    "node": "18.5.0"
+  },
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
