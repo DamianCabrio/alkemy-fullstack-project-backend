@@ -90,10 +90,20 @@ class TransactionDAO {
       [userId]
     );
 
+    const groupByLastSixMonths = await db.raw(
+      `SELECT COALESCE(COUNT(t.id),0) as total, COALESCE(SUM(t.amount),0) as total_amount, MONTH(t.date) as month, YEAR(t.date) as year
+      FROM transaction t
+      WHERE t.user_id = ? OR t.user_id IS NULL
+      GROUP BY MONTH(t.date), YEAR(t.date)
+      ORDER BY YEAR(t.date) DESC, MONTH(t.date) DESC
+      LIMIT 6;`,
+      [userId]
+    );
+
     return {
       groupByType: groupByType[0],
       groupByCategory: groupByCategory[0],
-      monthlyTransactions: [],
+      groupByLastSixMonths: groupByLastSixMonths[0],
     };
   }
 }
