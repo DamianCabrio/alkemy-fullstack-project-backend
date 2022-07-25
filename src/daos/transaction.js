@@ -114,7 +114,7 @@ class TransactionDAO {
       FROM transaction t
       WHERE t.user_id = ? OR t.user_id IS NULL
       GROUP BY MONTH(t.date), YEAR(t.date)
-      ORDER BY YEAR(t.date) DESC, MONTH(t.date) DESC
+      ORDER BY YEAR(t.date) ASC, MONTH(t.date) ASC
       LIMIT 6;`,
       [userId]
     );
