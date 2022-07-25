@@ -41,8 +41,10 @@ class TransactionDAO {
       .first();
   }
 
-  async getUserTransactions(userId) {
-    return db('transaction')
+  async getUserTransactions(userId, filters) {
+    const { type, category, sort, search } = filters;
+
+    const query = db('transaction')
       .innerJoin('category', 'transaction.category_id', '=', 'category.id')
       .innerJoin(
         'transaction_type',
@@ -50,12 +52,29 @@ class TransactionDAO {
         '=',
         'transaction_type.id'
       )
-      .where({ user_id: userId })
       .select(
         'transaction.*',
         'category.name as category_name',
         'transaction_type.name as type_name'
-      );
+      )
+      .where({ user_id: userId });
+
+    if (type) {
+      query.where({ type });
+    }
+    if (category) {
+      query.where({ category_id: category });
+    }
+    if (search) {
+      query.whereRaw(`LOWER(description) LIKE ?`, [`%${search}%`]);
+    }
+    if (sort) {
+      query.orderBy('date', sort);
+    }else{
+      query.orderBy('date', 'desc');
+    }
+
+    return query;
   }
 
   async updateTransaction(id, description, amount, date, category_id, userId) {

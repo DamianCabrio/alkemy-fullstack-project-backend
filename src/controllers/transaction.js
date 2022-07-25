@@ -41,7 +41,24 @@ class TransactionController {
   async getUserTransactions(req, res, next) {
     try {
       const userId = parseInt(req.user.id);
-      const transactions = await transactionService.getUserTransactions(userId);
+      const { type, category, sort, search } = req.query;
+
+      const queryObject = {};
+
+      if (type && type !== 'all') {
+        queryObject.type = type;
+      }
+      if (category && category !== 'all') {
+        queryObject.category_id = category;
+      }
+      if (sort && (sort === 'asc' || sort === 'desc')) {
+        queryObject.sort = sort;
+      }
+      if (search && search.trim() !== '') {
+        queryObject.search = search.toLowerCase();
+      }
+
+      const transactions = await transactionService.getUserTransactions(userId, queryObject);
       const total = transactions.length;
       const numOfPages = 1;
       success(
