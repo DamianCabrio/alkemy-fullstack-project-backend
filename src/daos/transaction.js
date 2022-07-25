@@ -73,7 +73,7 @@ class TransactionDAO {
 
   async showStats(userId) {
     const groupByType = await db.raw(
-      `SELECT COALESCE(COUNT(t.id),0) as total, COALESCE(SUM(t.amount),0) as total_amount, tt.name 
+      `SELECT COALESCE(COUNT(t.id),0) as total, COALESCE(SUM(t.amount),0) as total_amount, tt.name, tt.id
       FROM transaction t 
       RIGHT JOIN transaction_type tt on t.type = tt.id
       WHERE t.user_id = ? OR t.user_id IS NULL
@@ -82,7 +82,7 @@ class TransactionDAO {
     );
 
     const groupByCategory = await db.raw(
-      `SELECT COALESCE(COUNT(t.id),0) as total, COALESCE(SUM(t.amount),0) as total_amount, c.name 
+      `SELECT COALESCE(COUNT(t.id),0) as total, COALESCE(SUM(t.amount),0) as total_amount, c.name, c.id
       FROM transaction t 
       RIGHT JOIN category c on t.category_id = c.id
       WHERE t.user_id = ? OR t.user_id IS NULL
