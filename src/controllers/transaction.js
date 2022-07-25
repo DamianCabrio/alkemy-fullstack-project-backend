@@ -49,7 +49,7 @@ class TransactionController {
         queryObject.type = type;
       }
       if (category && category !== 'all') {
-        queryObject.category_id = category;
+        queryObject.category = category;
       }
       if (sort && (sort === 'asc' || sort === 'desc')) {
         queryObject.sort = sort;
