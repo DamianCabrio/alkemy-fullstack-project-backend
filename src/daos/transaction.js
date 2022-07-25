@@ -26,7 +26,17 @@ class TransactionDAO {
   async getTransaction(id, userId) {
     return db('transaction')
       .innerJoin('category', 'transaction.category_id', '=', 'category.id')
-      .select('transaction.*', 'category.name as category_name')
+      .innerJoin(
+        'transaction_type',
+        'transaction.type',
+        '=',
+        'transaction_type.id'
+      )
+      .select(
+        'transaction.*',
+        'category.name as category_name',
+        'transaction_type.name as type_name'
+      )
       .where({ 'transaction.id': id, user_id: userId })
       .first();
   }
@@ -34,8 +44,18 @@ class TransactionDAO {
   async getUserTransactions(userId) {
     return db('transaction')
       .innerJoin('category', 'transaction.category_id', '=', 'category.id')
+      .innerJoin(
+        'transaction_type',
+        'transaction.type',
+        '=',
+        'transaction_type.id'
+      )
       .where({ user_id: userId })
-      .select('transaction.*', 'category.name as category_name');
+      .select(
+        'transaction.*',
+        'category.name as category_name',
+        'transaction_type.name as type_name'
+      );
   }
 
   async updateTransaction(id, description, amount, date, category_id, userId) {
@@ -99,8 +119,16 @@ export const validationSchemaPost = [
     .exists({ checkFalsy: true })
     .withMessage('El tipo de transacción es requerido')
     .bail()
-    .isIn(['0', '1'])
-    .withMessage('El tipo ingresado no esta en el rango de valores permitidos'),
+    .toInt()
+    .isInt({ min: 1 })
+    .withMessage('El tipo de transacción debe ser un numero entero positivo')
+    .custom(async (value) => {
+      const type = await db('transaction_type').where({ id: value }).first();
+
+      if (!type) {
+        throw new Error('El tipo de transacción ingresado no existe');
+      }
+    }),
 ];
 
 export default new TransactionDAO();
