@@ -79,7 +79,7 @@ class TransactionDAO {
         'transaction_type.name as type_name'
       );
 
-    return {total: totalCount.total, transactions};
+    return { total: totalCount.total, transactions };
   }
 
   async updateTransaction(id, description, amount, date, category_id, userId) {
@@ -96,38 +96,55 @@ class TransactionDAO {
   }
 
   async showStats(userId) {
-    const groupByType = await db.raw(
-      `SELECT COALESCE(COUNT(t.id),0) as total, COALESCE(SUM(t.amount),0) as total_amount, tt.name, tt.id
-      FROM transaction t 
-      RIGHT JOIN transaction_type tt on t.type = tt.id
-      WHERE t.user_id = ? OR t.user_id IS NULL
-      GROUP BY tt.id;`,
-      [userId]
-    );
+    const groupByType = await db('transaction')
+      .select(
+        db.raw('COALESCE(COUNT(transaction.id),0) as total'),
+        db.raw('COALESCE(SUM(transaction.amount),0) as total_amount'),
+        'transaction_type.name',
+        'transaction_type.id'
+      )
+      .rightJoin(
+        'transaction_type',
+        'transaction.type',
+        '=',
+        'transaction_type.id'
+      )
+      .where({ user_id: userId })
+      .orWhereNull('transaction.user_id')
+      .groupBy('transaction_type.id');
 
-    const groupByCategory = await db.raw(
-      `SELECT COALESCE(COUNT(t.id),0) as total, COALESCE(SUM(t.amount),0) as total_amount, c.name, c.id
-      FROM transaction t 
-      RIGHT JOIN category c on t.category_id = c.id
-      WHERE t.user_id = ? OR t.user_id IS NULL
-      GROUP BY c.id;`,
-      [userId]
-    );
+    const groupByCategory = await db('transaction')
+      .select(
+        db.raw('COALESCE(COUNT(transaction.id),0) as total'),
+        db.raw('COALESCE(SUM(transaction.amount),0) as total_amount'),
+        'category.name',
+        'category.id',
+        'transaction.type'
+      )
+      .rightJoin('category', 'transaction.category_id', '=', 'category.id')
+      .where({ user_id: userId })
+      .orWhereNull('transaction.user_id')
+      .groupBy('transaction.type', 'category.id');
 
-    const groupByLastSixMonths = await db.raw(
-      `SELECT COALESCE(COUNT(t.id),0) as total, COALESCE(SUM(t.amount),0) as total_amount, MONTH(t.date) as month, YEAR(t.date) as year
-      FROM transaction t
-      WHERE t.user_id = ? OR t.user_id IS NULL
-      GROUP BY MONTH(t.date), YEAR(t.date)
-      ORDER BY YEAR(t.date) ASC, MONTH(t.date) ASC
-      LIMIT 6;`,
-      [userId]
-    );
+    const groupByLastSixMonths = await db('transaction')
+      .select(
+        db.raw('COALESCE(COUNT(transaction.id),0) as total'),
+        db.raw('COALESCE(SUM(transaction.amount),0) as total_amount'),
+        db.raw('MONTH(transaction.date) as month'),
+        db.raw('YEAR(transaction.date) as year'),
+        'transaction.type'
+      )
+      .where({ user_id: userId })
+      .orWhereNull('transaction.user_id')
+      .groupBy('month', 'year', 'transaction.type')
+      .orderBy('year', 'desc')
+      .orderBy('month', 'desc')
+      .limit(12);
 
     return {
-      groupByType: groupByType[0],
-      groupByCategory: groupByCategory[0],
-      groupByLastSixMonths: groupByLastSixMonths[0],
+      groupByType: groupByType,
+      groupByCategory: groupByCategory,
+      groupByLastSixMonths: groupByLastSixMonths,
     };
   }
 }
