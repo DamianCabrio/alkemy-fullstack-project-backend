@@ -138,22 +138,6 @@ const calculateStatsByLastSixMonths = async (statsByLastSixMonths) => {
         }
       }
     });
-
-    result.sort((a, b) => {
-      if (a.year > b.year) {
-        return -1;
-      } else if (a.year < b.year) {
-        return 1;
-      } else {
-        if (a.month > b.month) {
-          return -1;
-        } else if (a.month < b.month) {
-          return 1;
-        } else {
-          return 0;
-        }
-      }
-    });
   }
   return result;
 };
